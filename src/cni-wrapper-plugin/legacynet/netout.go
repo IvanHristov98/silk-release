@@ -90,6 +90,7 @@ func (m *NetOut) BulkInsertRules(netOutRules []garden.NetOutRule) error {
 	ruleSpec := m.Converter.BulkConvert(netOutRules, logChain, m.ASGLogging)
 	ruleSpec = append(ruleSpec, m.denyNetworksRules()...)
 	ruleSpec = append(ruleSpec, []rules.IPTablesRule{
+		{"-p", "tcp", "-m", "conntrack", "--ctstate", "NEW", "-m", "connlimit", "--connlimit-above", "15", "--connlimit-mask", "32", "--connlimit-daddr", "-j", "REJECT", "--reject-with", "tcp-reset"},
 		{"-p", "tcp", "-m", "state", "--state", "INVALID", "-j", "DROP"},
 		{"-m", "state", "--state", "RELATED,ESTABLISHED", "-j", "ACCEPT"},
 	}...)
