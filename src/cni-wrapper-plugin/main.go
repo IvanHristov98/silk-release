@@ -145,6 +145,12 @@ func cmdAdd(args *skel.CmdArgs) error {
 		},
 		DNSServers:        localDNSServers,
 		ContainerWorkload: containerWorkload,
+		ConnCount: legacynet.ConnCount{
+			Limit: cfg.ConnCount.Limit,
+			Max:   strconv.Itoa(cfg.ConnCount.Max),
+			Burst: strconv.Itoa(cfg.ConnCount.Burst),
+			Rate:  cfg.ConnCount.Rate,
+		},
 	}
 	if err := netOutProvider.Initialize(); err != nil {
 		return fmt.Errorf("initialize net out: %s", err)

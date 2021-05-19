@@ -39,6 +39,7 @@ type NetOut struct {
 	DenyNetworks          DenyNetworks
 	DNSServers            []string
 	ContainerWorkload     string
+	ConnCount             ConnCount
 }
 
 func (m *NetOut) Initialize() error {
@@ -89,8 +90,10 @@ func (m *NetOut) BulkInsertRules(netOutRules []garden.NetOutRule) error {
 
 	ruleSpec := m.Converter.BulkConvert(netOutRules, logChain, m.ASGLogging)
 	ruleSpec = append(ruleSpec, m.denyNetworksRules()...)
+
+	ruleSpec = m.appendConnCountLimitRules(ruleSpec)
+
 	ruleSpec = append(ruleSpec, []rules.IPTablesRule{
-		{"-p", "tcp", "-m", "conntrack", "--ctstate", "NEW", "-m", "connlimit", "--connlimit-above", "15", "--connlimit-mask", "32", "--connlimit-daddr", "-j", "REJECT", "--reject-with", "tcp-reset"},
 		{"-p", "tcp", "-m", "state", "--state", "INVALID", "-j", "DROP"},
 		{"-m", "state", "--state", "RELATED,ESTABLISHED", "-j", "ACCEPT"},
 	}...)
@@ -283,4 +286,23 @@ func (m *NetOut) denyNetworksRules() []rules.IPTablesRule {
 	}
 
 	return denyRules
+}
+
+func (m *NetOut) appendConnCountLimitRules(ruleSpec []rules.IPTablesRule) []rules.IPTablesRule {
+	if !m.ConnCount.Limit {
+		return ruleSpec
+	}
+
+	rateLimitRule := rules.IPTablesRule{
+		"-m", "conntrack", "--ctstate", "NEW",
+		"-m", "hashlimit", "--hashlimit-above", m.ConnCount.Rate, "--hashlimit-burst", m.ConnCount.Burst,
+		"--hashlimit-mode", "dstip", "--hashlimit-name", m.ContainerHandle, "-j", "REJECT",
+	}
+
+	hardLimitRule := rules.IPTablesRule{
+		"-m", "conntrack", "--ctstate", "NEW",
+		"-m", "connlimit", "--connlimit-above", m.ConnCount.Max, "--connlimit-mask", "32", "--connlimit-daddr", "-j", "REJECT",
+	}
+
+	return append(ruleSpec, rateLimitRule, hardLimitRule)
 }

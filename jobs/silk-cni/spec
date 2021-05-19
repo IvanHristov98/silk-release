@@ -96,3 +96,22 @@ properties:
       This can severely impact the network connectivity of applications.
       Use with extreme caution and at your own risk.
       These rules apply during the staging process.
+
+  conn_count.limit:
+    default: false
+    description: "Enables connection count limiting for containers."
+
+  conn_count.max:
+    default: 1000
+    description: "Hard limit of connections allowed per container. Has no effect when conn count limiting is disabled."
+
+  conn_count.burst:
+    default: 1000
+    description: "Maximum number of connections allowed to be opened at once per container. Has no effect when conn count limiting is disabled."
+
+  conn_count.rate:
+    default: "100/sec"
+    description: |
+      Sets the maximum number of connections to be opened per given period per container given that the burst is exhausted.
+      The value should be in the format <count>/<time-interval>. Examples are 1000/sec, 100/min, etc.
+      Has no effect when conn count limiting is disabled.

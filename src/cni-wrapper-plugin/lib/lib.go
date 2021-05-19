@@ -23,6 +23,13 @@ type DenyNetworksConfig struct {
 	Staging []string `json:"staging"`
 }
 
+type ConnCountConfig struct {
+	Limit bool   `json:"limit"`
+	Max   int    `json:"max"`
+	Burst int    `json:"burst"`
+	Rate  string `json:"rate"`
+}
+
 type WrapperConfig struct {
 	Datastore                       string                 `json:"datastore"`
 	DatastoreFileOwner              string                 `json:"datastore_file_owner"`
@@ -45,6 +52,7 @@ type WrapperConfig struct {
 	VTEPName                        string                 `json:"vtep_name"`
 	RuntimeConfig                   RuntimeConfig          `json:"runtimeConfig,omitempty"`
 	PolicyAgentForcePollAddress     string                 `json:"policy_agent_force_poll_address" validate:"nonzero"`
+	ConnCount                       ConnCountConfig        `json:"conn_count"`
 }
 
 func LoadWrapperConfig(bytes []byte) (*WrapperConfig, error) {
