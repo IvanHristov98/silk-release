@@ -91,7 +91,7 @@ func (m *NetOut) BulkInsertRules(netOutRules []garden.NetOutRule) error {
 	ruleSpec := m.Converter.BulkConvert(netOutRules, logChain, m.ASGLogging)
 	ruleSpec = append(ruleSpec, m.denyNetworksRules()...)
 
-	ruleSpec = m.appendConnCountLimitRules(ruleSpec)
+	ruleSpec = m.appendConnCountRules(ruleSpec)
 
 	ruleSpec = append(ruleSpec, []rules.IPTablesRule{
 		{"-p", "tcp", "-m", "state", "--state", "INVALID", "-j", "DROP"},
@@ -166,6 +166,8 @@ func (m *NetOut) defaultNetOutRules() ([]IpTablesFullChain, error) {
 			},
 		},
 	}
+
+	args = m.appendConnCountLogChains(args, forwardChainName)
 
 	return args, nil
 }
@@ -288,21 +290,59 @@ func (m *NetOut) denyNetworksRules() []rules.IPTablesRule {
 	return denyRules
 }
 
-func (m *NetOut) appendConnCountLimitRules(ruleSpec []rules.IPTablesRule) []rules.IPTablesRule {
+func (m *NetOut) appendConnCountRules(ruleSpec []rules.IPTablesRule) []rules.IPTablesRule {
 	if !m.ConnCount.Limit {
 		return ruleSpec
 	}
 
+	rateLimitLogChainName := m.ChainNamer.Prefix("rl-log", m.ContainerHandle)
 	rateLimitRule := rules.IPTablesRule{
 		"-m", "conntrack", "--ctstate", "NEW",
 		"-m", "hashlimit", "--hashlimit-above", m.ConnCount.Rate, "--hashlimit-burst", m.ConnCount.Burst,
-		"--hashlimit-mode", "dstip", "--hashlimit-name", m.ContainerHandle, "-j", "REJECT",
+		"--hashlimit-mode", "dstip", "--hashlimit-name", m.ContainerHandle, "-j", rateLimitLogChainName,
 	}
 
+	hardLimitLogChainName := m.ChainNamer.Prefix("hl-log", m.ContainerHandle)
 	hardLimitRule := rules.IPTablesRule{
 		"-m", "conntrack", "--ctstate", "NEW",
-		"-m", "connlimit", "--connlimit-above", m.ConnCount.Max, "--connlimit-mask", "32", "--connlimit-daddr", "-j", "REJECT",
+		"-m", "connlimit", "--connlimit-above", m.ConnCount.Max, "--connlimit-mask", "32", "--connlimit-daddr", "-j", hardLimitLogChainName,
 	}
 
 	return append(ruleSpec, rateLimitRule, hardLimitRule)
+}
+
+func (m *NetOut) appendConnCountLogChains(fullChain []IpTablesFullChain, forwardChainName string) []IpTablesFullChain {
+	if !m.ConnCount.Limit {
+		return fullChain
+	}
+
+	hardLimitLogChainName := m.ChainNamer.Prefix("hl-log", m.ContainerHandle)
+	rateLimitLogChainName := m.ChainNamer.Prefix("rl-log", m.ContainerHandle)
+
+	return append(fullChain, []IpTablesFullChain{
+		{
+			"filter",
+			"",
+			rateLimitLogChainName,
+			[]rules.IPTablesRule{{
+				"--jump", rateLimitLogChainName,
+			}},
+			[]rules.IPTablesRule{
+				rules.NewConnCountRateLimitRejectLogRule(m.ContainerHandle, m.DeniedLogsPerSec),
+				rules.NewNetOutDefaultRejectRule(),
+			},
+		},
+		{
+			"filter",
+			"",
+			hardLimitLogChainName,
+			[]rules.IPTablesRule{{
+				"--jump", hardLimitLogChainName,
+			}},
+			[]rules.IPTablesRule{
+				rules.NewConnCountHardLimitRejectLogRule(m.ContainerHandle, m.DeniedLogsPerSec),
+				rules.NewNetOutDefaultRejectRule(),
+			},
+		},
+	}...)
 }

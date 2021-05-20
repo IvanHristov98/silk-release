@@ -269,6 +269,9 @@ func cmdDel(args *skel.CmdArgs) error {
 		ContainerHandle:    args.ContainerID,
 		ContainerIP:        container.IP,
 		HostInterfaceNames: interfaceNames,
+		ConnCount: legacynet.ConnCount{
+			Limit: n.ConnCount.Limit,
+		},
 	}
 
 	if err = netOutProvider.Cleanup(); err != nil {

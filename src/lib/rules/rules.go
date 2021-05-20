@@ -326,12 +326,15 @@ func NewOverlayRelatedEstablishedRule(containerIP string) IPTablesRule {
 }
 
 func NewNetOutDefaultRejectLogRule(containerHandle string, deniedLogsPerSec int) IPTablesRule {
-	return IPTablesRule{
-		"-m", "limit", "--limit", fmt.Sprintf("%d/s", deniedLogsPerSec),
-		"--limit-burst", strconv.Itoa(deniedLogsPerSec),
-		"--jump", "LOG",
-		"--log-prefix", trimAndPad(fmt.Sprintf("DENY_%s", containerHandle)),
-	}
+	return newNetOutRejectLogRule(containerHandle, "DENY", deniedLogsPerSec)
+}
+
+func NewConnCountHardLimitRejectLogRule(containerHandle string, deniedLogsPerSec int) IPTablesRule {
+	return newNetOutRejectLogRule(containerHandle, "DENY_CHL", deniedLogsPerSec)
+}
+
+func NewConnCountRateLimitRejectLogRule(containerHandle string, deniedLogsPerSec int) IPTablesRule {
+	return newNetOutRejectLogRule(containerHandle, "DENY_CRL", deniedLogsPerSec)
 }
 
 func NewNetOutDefaultRejectRule() IPTablesRule {
@@ -377,6 +380,15 @@ func NewEgress(interfaceName, ip, protocol, ipStart, ipEnd string, icmpType, icm
 	egressRule = append(egressRule, "-j", "ACCEPT")
 
 	return egressRule
+}
+
+func newNetOutRejectLogRule(containerHandle, prefix string, deniedLogsPerSec int) IPTablesRule {
+	return IPTablesRule{
+		"-m", "limit", "--limit", fmt.Sprintf("%d/s", deniedLogsPerSec),
+		"--limit-burst", strconv.Itoa(deniedLogsPerSec),
+		"--jump", "LOG",
+		"--log-prefix", trimAndPad(fmt.Sprintf("%s_%s", prefix, containerHandle)),
+	}
 }
 
 func trimAndPad(name string) string {
