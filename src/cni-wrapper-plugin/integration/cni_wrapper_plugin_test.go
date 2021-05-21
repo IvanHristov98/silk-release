@@ -234,6 +234,12 @@ var _ = Describe("CniWrapperPlugin", func() {
 						},
 					},
 				},
+				OutConn: lib.OutConnConfig{
+					Limit:      false,
+					Max:        1000,
+					Burst:      999,
+					RatePerSec: 100,
+				},
 			},
 		}
 
