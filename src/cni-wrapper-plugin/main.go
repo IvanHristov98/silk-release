@@ -148,7 +148,6 @@ func cmdAdd(args *skel.CmdArgs) error {
 		Conn: legacynet.OutConn{
 			Limit:      cfg.OutConn.Limit,
 			Logging:    cfg.OutConn.Logging,
-			Max:        cfg.OutConn.Max,
 			Burst:      cfg.OutConn.Burst,
 			RatePerSec: cfg.OutConn.RatePerSec,
 		},
