@@ -2,8 +2,6 @@ cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMT
 code.cloudfoundry.org/bbs v0.0.0-20181031172904-fa22f11221f9/go.mod h1:XKlGVVXFi5EcHHMPzw3xgONK9PeEZuUbIC43XNwxD10=
 code.cloudfoundry.org/bbs v0.0.0-20210727125654-2ad50317f7ed h1:lXyKwHvjX8AofvDkI/LVrjro0iXNMztPUBHjxxHxGKs=
 code.cloudfoundry.org/bbs v0.0.0-20210727125654-2ad50317f7ed/go.mod h1:XKlGVVXFi5EcHHMPzw3xgONK9PeEZuUbIC43XNwxD10=
-code.cloudfoundry.org/cf-networking-helpers v0.0.0-20210818160341-4ed163a496a8 h1:SMURRzY35GkwTgY5l0stETBNJRAUoTP8F4t7DPKg9Yc=
-code.cloudfoundry.org/cf-networking-helpers v0.0.0-20210818160341-4ed163a496a8/go.mod h1:m55RU/DiLvIJ2gO7KEmP9wKU9k3+1aZ5tWBOMhdPnsg=
 code.cloudfoundry.org/cf-networking-helpers v0.0.0-20210825141236-777da71209d5 h1:2LNoWK64q5eJjFK1be1HoNeWh0tFZ4nGIz4YJmDvn00=
 code.cloudfoundry.org/cf-networking-helpers v0.0.0-20210825141236-777da71209d5/go.mod h1:kf4WVsGZqWT4r9wA9xLpdc4U/QtB5HcUUMa1VSsb6AM=
 code.cloudfoundry.org/debugserver v0.0.0-20210608171006-d7658ce493f4 h1:6UIZEq5iyr4zDCgOH5MtRbgvsIjk4XFNUaaoMekEssQ=
@@ -18,8 +16,6 @@ code.cloudfoundry.org/policy_client v0.0.0-20190731000202-6324003c2bfd h1:+8UklQ
 code.cloudfoundry.org/policy_client v0.0.0-20190731000202-6324003c2bfd/go.mod h1:r/eJhWrqInkcUBmDxao4Vb/TmMuT8HcXSuAsHXgGLF4=
 code.cloudfoundry.org/runtimeschema v0.0.0-20180622181441-7dcd19348be6 h1:J08p1/LBnhv5BDDf0WLpHRyMJFCws3vd3fLCFL/iVnQ=
 code.cloudfoundry.org/runtimeschema v0.0.0-20180622181441-7dcd19348be6/go.mod h1:QSfnsqiGUdV3OOxqHxQkmUZwycGJNWYdredPgeGuGf4=
-code.cloudfoundry.org/silk v0.0.0-20210819160436-0d64dc597f96 h1:Dtp1hnejj7r0G+EpJhn9PQOF+QUGdw0nxCTW4zKwofY=
-code.cloudfoundry.org/silk v0.0.0-20210819160436-0d64dc597f96/go.mod h1:q3g8sS2bogccq/ybuZUQmgvC52MDybbMe9GamoK/9+Q=
 code.cloudfoundry.org/silk v0.0.0-20210826171638-22aea0ef1999 h1:u4GJ0LxJY2qLfqnwE4XNIHuT4t32HlEGCZ3p4t2R9Hs=
 code.cloudfoundry.org/silk v0.0.0-20210826171638-22aea0ef1999/go.mod h1:G5c/2qYpcd2SRsFEo2pgkMy69Lr+c7FVYdAjzzZHDj0=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
@@ -50,8 +46,9 @@ github.com/cloudfoundry/loggregatorlib v0.0.0-20170823162133-36eddf15ef12/go.mod
 github.com/cloudfoundry/sonde-go v0.0.0-20171206171820-b33733203bb4/go.mod h1:GS0pCHd7onIsewbw8Ue9qa9pZPv2V88cUZDttK6KzgI=
 github.com/cloudfoundry/sonde-go v0.0.0-20200416163440-a42463ba266b h1:cb7pGf4j2ZzRfnQMqVeTtMLv0l2Y81V5biZGF7zVokg=
 github.com/cloudfoundry/sonde-go v0.0.0-20200416163440-a42463ba266b/go.mod h1:GS0pCHd7onIsewbw8Ue9qa9pZPv2V88cUZDttK6KzgI=
-github.com/containernetworking/cni v0.6.0 h1:FXICGBZNMtdHlW65trpoHviHctQD3seWhRRcqp2hMOU=
 github.com/containernetworking/cni v0.6.0/go.mod h1:LGwApLUm2FpoOfxTDEeq8T9ipbpZ61X79hmU3w8FmsY=
+github.com/containernetworking/cni v0.8.1 h1:7zpDnQ3T3s4ucOuJ/ZCLrYBxzkg0AELFfII3Epo9TmI=
+github.com/containernetworking/cni v0.8.1/go.mod h1:LGwApLUm2FpoOfxTDEeq8T9ipbpZ61X79hmU3w8FmsY=
 github.com/containernetworking/plugins v0.6.1-0.20171122160932-92c634042c38 h1:MZiohm4azgzk9DWCOMAHnvS8YjKjzCb04v4/x2Fn87U=
 github.com/containernetworking/plugins v0.6.1-0.20171122160932-92c634042c38/go.mod h1:dagHaAhNjXjT9QYOklkKJDGaQPTg4pf//FrUcJeb7FU=
 github.com/coreos/bbolt v1.3.2/go.mod h1:iRUV2dpdMOn7Bo10OQBFzIJO9kkE559Wcmn+qkEiiKk=
@@ -330,7 +327,6 @@ golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543/go.mod h1:I/5z698sn9Ka8T
 golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 h1:go1bK/D/BFZV2I8cIQd1NKEZ+0owSTG1fDTci4IqFcE=
 golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 google.golang.org/appengine v1.1.0/go.mod h1:EbEs0AVv82hx2wNQdGPgUI5lhzA/G0D9YwlJXL52JkM=
-google.golang.org/appengine v1.3.0 h1:FBSsiFRMz3LBeXIomRnVzrQwSDj4ibvcRexLG0LZGQk=
 google.golang.org/appengine v1.3.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 google.golang.org/genproto v0.0.0-20180817151627-c66870c02cf8/go.mod h1:JiN7NxoALGmiZfu7CAH4rXhgtRTLTxftemlI0sWmxmc=
 google.golang.org/grpc v1.19.0/go.mod h1:mqu4LbDTu4XGKhr4mRzUsmM4RtVoemTSY81AxZiDr8c=
